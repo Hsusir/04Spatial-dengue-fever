@@ -1,199 +1,203 @@
 ---
-title: "¥ÎR¤ÀªR2015¥x«nµn¹j¼ö¬Ì±¡"
-author: "³\sir"
+title: "ç”¨Råˆ†æ2015å°å—ç™»éš”ç†±ç–«æƒ…?"
+author: "è¨±sir"
 
 ---
 
-### **[³]©w©Ò»İªº¨ç¦¡®w(libraries)¥H¤Î¸ü¤J¸ê®Æ]**
+### **[è¨­å®šæ‰€éœ€çš„å‡½å¼åº«(libraries)ä»¥åŠè¼‰å…¥è³‡æ–™]**
 ```{r message=FALSE, warning=FALSE, results='hide'}
 
-setwd("D:/Rdata Practice/dengue fever")
+setwd("/media/hsusir/DATA/Rdata Practice/04Spatial/dengue fever")
 dengue <- read.csv("./dengue-20151107-utf8.csv",  fileEncoding="utf8")
 
 ```
 
 ### **[Part 1].Data-distributed**
 
-#### **1-1.±Ô­z©Ê²Î­p**
+#### **1-1.æ•˜è¿°æ€§çµ±è¨ˆ**
 ```{r message=FALSE, warning=FALSE}
 str(dengue)
 summary(dengue)
 ```
 
-#### **1-2.µe¦b¦a¹Ï¤W¨Ó¬İ**
+#### **1-2.ç•«åœ¨åœ°åœ–ä¸Šä¾†çœ‹**
+```{}
+install.packages("ggmap")
+install.packages("mapproj")
+```
+
 ```{r message=FALSE, warning=FALSE}
 library(ggmap)
 library(mapproj)
 
 map <- get_map(location = "Taiwan", zoom = 7, language = "zh-TW", maptype = "roadmap")
-ggmap(map, darken = c(0.5, "white")) +geom_point(aes(x = ¸g«×®y¼Ğ, y = ½n«×®y¼Ğ),
+ggmap(map, darken = c(0.5, "white")) +geom_point(aes(x = ç¶“åº¦åº§æ¨™, y = ç·¯åº¦åº§æ¨™),
   color = "red", data = dengue)
 ```
 
-#### **1-3.¦Aµe¤@±i¤ñ¸û¤jªº¹Ï**
+#### **1-3.å†ç•«ä¸€å¼µæ¯”è¼ƒå¤§çš„åœ–**
 ```{r message=FALSE, warning=FALSE}
 map <- get_map(location = "Tainan", zoom = 9, language = "zh-TW", maptype = "roadmap")
-ggmap(map, darken = c(0.5, "white")) +  geom_point(aes(x = ¸g«×®y¼Ğ, y = ½n«×®y¼Ğ),
+ggmap(map, darken = c(0.5, "white")) +  geom_point(aes(x = ç¶“åº¦åº§æ¨™, y = ç·¯åº¦åº§æ¨™),
   color = "red", data = dengue)
 ```
 
-#### **1-4.­q¥X¤@­Ó¿z¿ï¸ê®Æªº¤è§Î°Ï°ì**
+#### **1-4.è¨‚å‡ºä¸€å€‹ç¯©é¸è³‡æ–™çš„æ–¹å½¢å€åŸŸ**
 ```{r message=FALSE, warning=FALSE}
 map <- get_map(location = "Tainan", zoom = 9,language = "zh-TW", maptype = "roadmap")
 ggmap(map, darken = c(0.5, "white")) +
-  geom_point(aes(x = ¸g«×®y¼Ğ, y = ½n«×®y¼Ğ),
+  geom_point(aes(x = ç¶“åº¦åº§æ¨™, y = ç·¯åº¦åº§æ¨™),
   color = "red", data = dengue) +
   geom_rect(aes(xmin = 120, xmax = 120.6, ymin = 22.8, ymax = 23.5),
   alpha = 0.1)
 ```
 
-#### **1-5.§â¹ê»Úªº¸ê®Æ¿z¿ï¥X¨Ó**
+#### **1-5.æŠŠå¯¦éš›çš„è³‡æ–™ç¯©é¸å‡ºä¾†**
 ```{r message=FALSE, warning=FALSE}
-filter.idx1 <- dengue$½n«×®y¼Ğ > 22.8 & dengue$½n«×®y¼Ğ < 23.5
-filter.idx2 <- dengue$¸g«×®y¼Ğ > 120 & dengue$¸g«×®y¼Ğ < 120.6
+filter.idx1 <- dengue$ç·¯åº¦åº§æ¨™ > 22.8 & dengue$ç·¯åº¦åº§æ¨™ < 23.5
+filter.idx2 <- dengue$ç¶“åº¦åº§æ¨™ > 120 & dengue$ç¶“åº¦åº§æ¨™ < 120.6
 dengue.tn <- dengue[filter.idx1 & filter.idx2, ]
 ```
 
-#### **1-6.§â¿z¿ï¦nªº¸ê®Æµe¦b¦a¹Ï¤W**
+#### **1-6.æŠŠç¯©é¸å¥½çš„è³‡æ–™ç•«åœ¨åœ°åœ–ä¸Š**
 
-- ³o±i¹Ï´N¬O»O«n¥«¥ş¦~ªºµn­²¼ö¯f¨Ò¤À§G¦a¹Ï
+- é€™å¼µåœ–å°±æ˜¯è‡ºå—å¸‚å…¨å¹´çš„ç™»é©ç†±ç—…ä¾‹åˆ†ä½ˆåœ°åœ–
 
 ```{r message=FALSE, warning=FALSE}
 map <- get_map(location = c(lon = 120.246100, lat = 23.121198), zoom = 10, language = "zh-TW")
 ggmap(map, darken = c(0.5, "white")) +
-  geom_point(aes(x = ¸g«×®y¼Ğ, y = ½n«×®y¼Ğ),
+  geom_point(aes(x = ç¶“åº¦åº§æ¨™, y = ç·¯åº¦åº§æ¨™),
   color = "red", data = dengue.tn)
 ```
 
 ### **[Part 2].Data-ETL**
 
-- ±q¤W­± dengue ªº summary ¿é¥X¤¤¥i¥H¬İ¨ì¦æ¬F°Ïªº¦WºÙ¦³¤@¨Ç°İÃD¡A§Ú­Ì±N dengue.tn$°Ï§O ªº levels ¦C¥X¨Ó¬İ¤@¤U
+- å¾ä¸Šé¢ dengue çš„ summary è¼¸å‡ºä¸­å¯ä»¥çœ‹åˆ°è¡Œæ”¿å€çš„åç¨±æœ‰ä¸€äº›å•é¡Œï¼Œæˆ‘å€‘å°‡ dengue.tn$å€åˆ¥ çš„ levels åˆ—å‡ºä¾†çœ‹ä¸€ä¸‹
 
 ```{r message=FALSE, warning=FALSE}
-levels(dengue.tn$°Ï§O)
+levels(dengue.tn$å€åˆ¥)
 
 ```
 
-- ³¡¥÷ªº°Ï§O¦WºÙ¦³¥]§tªÅ¥Õ¡A¦Ó¦³¨Ç«o¨S¦³¡A°Ï§O¦WºÙ¤£²Î¤@·|³y¦¨µ{¦¡±N¤@­Ó°Ï°ì»~§P¬°¦h­Ó°Ï°ì¡C³o¸Ì§Ú­Ì­×¥¿°Ï§Oªº¦WºÙ¡A²Î¤@±N©Ò¦³ªºªÅ¥Õ¥h±¼
+- éƒ¨ä»½çš„å€åˆ¥åç¨±æœ‰åŒ…å«ç©ºç™½ï¼Œè€Œæœ‰äº›å»æ²’æœ‰ï¼Œå€åˆ¥åç¨±ä¸çµ±ä¸€æœƒé€ æˆç¨‹å¼å°‡ä¸€å€‹å€åŸŸèª¤åˆ¤ç‚ºå¤šå€‹å€åŸŸã€‚é€™è£¡æˆ‘å€‘ä¿®æ­£å€åˆ¥çš„åç¨±ï¼Œçµ±ä¸€å°‡æ‰€æœ‰çš„ç©ºç™½å»æ‰
 
 ```{r message=FALSE, warning=FALSE}
-dengue.tn[dengue.tn$°Ï§O == "¥_¡@°Ï", ]$°Ï§O <- "¥_°Ï"
-dengue.tn[dengue.tn$°Ï§O == "ªF¡@°Ï", ]$°Ï§O <- "ªF°Ï"
-dengue.tn[dengue.tn$°Ï§O == "«n¡@°Ï" | dengue.tn$°Ï§O == "«n    °Ï", ]$°Ï§O <- "«n°Ï"
-dengue.tn[dengue.tn$°Ï§O == "¥Ã±d°Ï ", ]$°Ï§O <- "¥Ã±d°Ï"
+dengue.tn[dengue.tn$å€åˆ¥ == "åŒ—ã€€å€", ]$å€åˆ¥ <- "åŒ—å€"
+dengue.tn[dengue.tn$å€åˆ¥ == "æ±ã€€å€", ]$å€åˆ¥ <- "æ±å€"
+dengue.tn[dengue.tn$å€åˆ¥ == "å—ã€€å€" | dengue.tn$å€åˆ¥ == "å—    å€", ]$å€åˆ¥ <- "å—å€"
+dengue.tn[dengue.tn$å€åˆ¥ == "æ°¸åº·å€ ", ]$å€åˆ¥ <- "æ°¸åº·å€"
 ```
 
-- ­«·s«Ø¥ß¤@¦¸ factor¡A³o¼Ë¥i¥H±NªÅªº levels ¥h±¼
+- é‡æ–°å»ºç«‹ä¸€æ¬¡ factorï¼Œé€™æ¨£å¯ä»¥å°‡ç©ºçš„ levels å»æ‰
 
 ```{r message=FALSE, warning=FALSE}
-dengue.tn$°Ï§O <- factor(dengue.tn$°Ï§O)
+dengue.tn$å€åˆ¥ <- factor(dengue.tn$å€åˆ¥)
 
-#µM«á¦A½T»{¤@¦¸°Ï§O¦WºÙ
-levels(dengue.tn$°Ï§O)
+#ç„¶å¾Œå†ç¢ºèªä¸€æ¬¡å€åˆ¥åç¨±
+levels(dengue.tn$å€åˆ¥)
 ```
 
 
-### **[Part 3].¾ãÅéÁÍ¶Õ¤ÀªR**
+### **[Part 3].æ•´é«”è¶¨å‹¢åˆ†æ**
 
-- ¤ÀªR¥ş»O«n¥«¥»¤gµn­²¼ö¯f¨Ò¼Æ¾ãÅé¤À§G»PÁÍ¶Õ¡C§ä¥X¬Ì±¡³ÌÄY­«ªº®É¬q¡C
+- åˆ†æå…¨è‡ºå—å¸‚æœ¬åœŸç™»é©ç†±ç—…ä¾‹æ•¸æ•´é«”åˆ†ä½ˆèˆ‡è¶¨å‹¢ã€‚æ‰¾å‡ºç–«æƒ…æœ€åš´é‡çš„æ™‚æ®µã€‚
 
-#### **3-1.µe¥X¨C¶gµn­²¼öªº¯f¨Ò¼Æ²Î­p¹Ï**
+#### **3-1.ç•«å‡ºæ¯é€±ç™»é©ç†±çš„ç—…ä¾‹æ•¸çµ±è¨ˆåœ–**
 ```{r message=FALSE, warning=FALSE}
-hist(as.Date(dengue.tn$½T¶E¤é), breaks = "weeks",
-  freq = TRUE, main = "µn­²¼ö¨C¶g¯f¨Ò¼Æ", xlab = "¤é´Á",
-  ylab = "¯f¨Ò¼Æ", format = "%m/%d")
+hist(as.Date(dengue.tn$ç¢ºè¨ºæ—¥), breaks = "weeks",
+  freq = TRUE, main = "ç™»é©ç†±æ¯é€±ç—…ä¾‹æ•¸", xlab = "æ—¥æœŸ",
+  ylab = "ç—…ä¾‹æ•¸", format = "%m/%d")
 ```
 
-#### **3-2.­pºâ¨C­Ó¤ëªºµn­²¼ö¯f¨Ò¼Æ**
+#### **3-2.è¨ˆç®—æ¯å€‹æœˆçš„ç™»é©ç†±ç—…ä¾‹æ•¸**
 ```{r message=FALSE, warning=FALSE}
-dengue.tn$month <- format(as.Date(dengue.tn$½T¶E¤é), "%m")
+dengue.tn$month <- format(as.Date(dengue.tn$ç¢ºè¨ºæ—¥), "%m")
 table(dengue.tn$month)
 
-barplot(table(dengue.tn$month), xlab = "¤ë¥÷", ylab = "¯f¨Ò¼Æ",
-  main = "µn­²¼ö¨C¤ë¯f¨Ò¼Æ")
+barplot(table(dengue.tn$month), xlab = "æœˆä»½", ylab = "ç—…ä¾‹æ•¸",
+  main = "ç™»é©ç†±æ¯æœˆç—…ä¾‹æ•¸")
 ```
 
 ```{r message=FALSE, warning=FALSE}
-#¨Ï¥Î ggplot2 ¨Óµe
+#ä½¿ç”¨ ggplot2 ä¾†ç•«
 library(ggplot2)
 library(scales)
 
-ggplot(dengue.tn, aes(x=as.Date(½T¶E¤é))) +
+ggplot(dengue.tn, aes(x=as.Date(ç¢ºè¨ºæ—¥))) +
   stat_bin(binwidth=7, position="identity") +
   scale_x_date(breaks=date_breaks(width="1 month")) +
   theme(axis.text.x = element_text(angle=90)) +
-  xlab("¤é´Á") + ylab("¯f¨Ò¼Æ") +
-  ggtitle("µn­²¼ö¨C¶g¯f¨Ò¼Æ")
+  xlab("æ—¥æœŸ") + ylab("ç—…ä¾‹æ•¸") +
+  ggtitle("ç™»é©ç†±æ¯é€±ç—…ä¾‹æ•¸")
 ```
 
-- ±q¹Ï§Î¤W¥i¥H¬İ¥Xµn­²¼öªº¬Ì±¡³ÌÄY­«ªº®É´Á¬O¦b¤E¤ë¥÷«e«á
+- å¾åœ–å½¢ä¸Šå¯ä»¥çœ‹å‡ºç™»é©ç†±çš„ç–«æƒ…æœ€åš´é‡çš„æ™‚æœŸæ˜¯åœ¨ä¹æœˆä»½å‰å¾Œ
 
 
-#### **3-3.¤ÀªR¬Ì±¡³ÌÄY­«ªº°Ï°ì¡C­pºâ¦U­Ó¦æ¬F°Ïªº¯f¨ÒÁ`¼Æ**
+#### **3-3.åˆ†æç–«æƒ…æœ€åš´é‡çš„å€åŸŸã€‚è¨ˆç®—å„å€‹è¡Œæ”¿å€çš„ç—…ä¾‹ç¸½æ•¸**
 ```{r message=FALSE, warning=FALSE}
-dengue.region.summary <- sort(summary(dengue.tn$°Ï§O), decreasing = FALSE)
+dengue.region.summary <- sort(summary(dengue.tn$å€åˆ¥), decreasing = FALSE)
 dengue.region.summary
 
 barplot(dengue.region.summary, las = 2, horiz = TRUE,
-  main = "¦U¦æ¬F°Ï¯f¨Ò²Î­p", xlab = "¯f¨Ò¼Æ")
+  main = "å„è¡Œæ”¿å€ç—…ä¾‹çµ±è¨ˆ", xlab = "ç—…ä¾‹æ•¸")
 pie(dengue.region.summary)
 
 ```
 
-### **[Part 4].²Ó³¡¤ÀªR**
+### **[Part 4].ç´°éƒ¨åˆ†æ**
 
-- ±N¸ê®Æ¨Ì¾Ú¦a²z¦ì¸m»P®É¶¡°Ï¤À¡A¶i¦æ²Ó³¡ªº¤ÀªR
+- å°‡è³‡æ–™ä¾æ“šåœ°ç†ä½ç½®èˆ‡æ™‚é–“å€åˆ†ï¼Œé€²è¡Œç´°éƒ¨çš„åˆ†æ
 
-#### **4-1.±N³ÌÄY­«ªº¤­­Ó¦æ¬F°Ï¯f¨Ò¸ê®Æ¿z¿ï¥X¨Ó**
+#### **4-1.å°‡æœ€åš´é‡çš„äº”å€‹è¡Œæ”¿å€ç—…ä¾‹è³‡æ–™ç¯©é¸å‡ºä¾†?**
 ```{r message=FALSE, warning=FALSE}
 dengue.top.reg <- dengue.tn[
-  dengue.tn$°Ï§O == "¥_°Ï" |
-  dengue.tn$°Ï§O == "¤¤¦è°Ï" |
-  dengue.tn$°Ï§O == "«n°Ï" |
-  dengue.tn$°Ï§O == "ªF°Ï" |
-  dengue.tn$°Ï§O == "¥Ã±d°Ï", ]
+  dengue.tn$å€åˆ¥ == "åŒ—å€" |
+  dengue.tn$å€åˆ¥ == "ä¸­è¥¿å€" |
+  dengue.tn$å€åˆ¥ == "å—å€" |
+  dengue.tn$å€åˆ¥ == "æ±å€" |
+  dengue.tn$å€åˆ¥ == "æ°¸åº·å€", ]
 ```
 
-#### **4-2.¨Ì¾Ú®É¶¡µe¥X³o 5 ­Ó¦æ¬F°Ïªº¬Ì±¡ÅÜ¤Æ**
+#### **4-2.ä¾æ“šæ™‚é–“ç•«å‡ºé€™ 5 å€‹è¡Œæ”¿å€çš„ç–«æƒ…è®ŠåŒ–**
 ```{r message=FALSE, warning=FALSE}
-ggplot(dengue.top.reg, aes(x=as.Date(½T¶E¤é))) +
+ggplot(dengue.top.reg, aes(x=as.Date(ç¢ºè¨ºæ—¥))) +
   stat_bin(binwidth=7, position="identity") +
   scale_x_date(breaks=date_breaks(width="1 month")) +
   theme(axis.text.x = element_text(angle=90)) +
-  xlab("¤é´Á") + ylab("¯f¨Ò¼Æ") +
-  ggtitle("µn­²¼ö¨C¶g¯f¨Ò¼Æ") + facet_grid(°Ï§O ~ .)
+  xlab("æ—¥æœŸ") + ylab("ç—…ä¾‹æ•¸") +
+  ggtitle("ç™»é©ç†±æ¯é€±ç—…ä¾‹æ•¸") + facet_grid(å€åˆ¥ ~ .)
 ```
 
-#### **4-3.¨Ì·Ó¤ë¥÷¨Óµe¹Ï**
+#### **4-3.ä¾ç…§æœˆä»½ä¾†ç•«åœ–?**
 ```{r message=FALSE, warning=FALSE}
-ggplot(dengue.top.reg, aes(x=as.Date(½T¶E¤é))) +
+ggplot(dengue.top.reg, aes(x=as.Date(ç¢ºè¨ºæ—¥))) +
   stat_bin(breaks=as.numeric(seq(as.Date('2015-1-1'),
     as.Date('2015-12-1'), '1 month')), position="identity") +
   scale_x_date(breaks=date_breaks(width="1 month")) +
   theme(axis.text.x = element_text(angle=90)) +
-  xlab("¤é´Á") + ylab("¯f¨Ò¼Æ") +
-  ggtitle("µn­²¼ö¨C¤ë¯f¨Ò¼Æ") + facet_grid(°Ï§O ~ .)
+  xlab("æ—¥æœŸ") + ylab("ç—…ä¾‹æ•¸") +
+  ggtitle("ç™»é©ç†±æ¯æœˆç—…ä¾‹æ•¸") + facet_grid(å€åˆ¥ ~ .)
 ```
+- çœ‹èµ·ä¾†é€™ 5 å€‹å€åŸŸæœ€åš´é‡çš„æ™‚é–“éƒ½åœ¨ 9 æœˆä¸­æ—¬é™„è¿‘
 
-- ¬İ°_¨Ó³o 5 ­Ó°Ï°ì³ÌÄY­«ªº®É¶¡³£¦b 9 ¤ë¤¤¦¯ªşªñ
-
-#### **4-4.¨Ì¾Ú¤ë¥÷°Ï¤À¡Aµe¥X¨C­Ó¤ëªºµn­²¼ö¯f¨Ò¤À§G¦a¹Ï**
+#### **4-4.ä¾æ“šæœˆä»½å€åˆ†ï¼Œç•«å‡ºæ¯å€‹æœˆçš„ç™»é©ç†±ç—…ä¾‹åˆ†ä½ˆåœ°åœ–**
 ```{r message=FALSE, warning=FALSE}
 map <- get_map(location = c(lon = 120.246100, lat = 23.121198),
   zoom = 10, language = "zh-TW")
 ggmap(map, darken = c(0.5, "white")) +
-  geom_point(aes(x = ¸g«×®y¼Ğ, y = ½n«×®y¼Ğ),
+  geom_point(aes(x = ç¶“åº¦åº§æ¨™, y = ç·¯åº¦åº§æ¨™),
   color = "red", data = dengue.tn) +
   facet_wrap(~ month)
 ```
 
-### **[Part 5].©wÂI¤ÀªR**
+### **[Part 5].å®šé»åˆ†æ**
 
-- °²³]¬Y¤H©~¦í¦b¥x«n¥«¡A¨ä¦í®aªº¸g½n«×®y¼Ğ¬° (22.997088, 120.201771)¡A¦Óµn­²¼ö¯f´C°A­¸¦æ¬¡°Ê½d³ò¥i»·¦Ü 400 ¡ã 800 ¤½¤Øªº¦a°Ï¡A±N¦¹¤H¦í®a 400 ¤½¤Ø¥H¤ºªº¯f¨Ò¸ê®Æ¿z¿ï¥X¨Ó¡AÆ[¹î¨C­Ó¤ëªº¬Ì±¡ÅÜ¤Æ¡C
+- å‡è¨­æŸäººå±…ä½åœ¨å°å—å¸‚ï¼Œå…¶ä½å®¶çš„ç¶“ç·¯åº¦åº§æ¨™ç‚º (22.997088, 120.201771)ï¼Œè€Œç™»é©ç†±ç—…åª’èšŠé£›è¡Œæ´»å‹•ç¯„åœå¯é è‡³ 400 ï½ 800 å…¬å°ºçš„åœ°å€ï¼Œå°‡æ­¤äººä½å®¶ 400 å…¬å°ºä»¥å…§çš„ç—…ä¾‹è³‡æ–™ç¯©é¸å‡ºä¾†ï¼Œè§€å¯Ÿæ¯å€‹æœˆçš„ç–«æƒ…è®ŠåŒ–ã€‚
 
-#### **5-1.­pºâ¥X¨âÂI¤§¶¡ªº¶ZÂ÷¡A³æ¦ì¬°¤½¨½**
+#### **5-1.è¨ˆç®—å‡ºå…©é»ä¹‹é–“çš„è·é›¢ï¼Œå–®ä½ç‚ºå…¬é‡Œ**
 
-- ³o¬O­pºâ¦a²y¤W¨âÂI¤§¶¡¶ZÂ÷ªº¨ç¼Æ¡A¿é¤J¨âÂIªº¸g½n«×¡A¥i¥H­pºâ¥X¨âÂI¤§¶¡ªº¶ZÂ÷¡A³æ¦ì¬°¤½¨½¡C
+- é€™æ˜¯è¨ˆç®—åœ°çƒä¸Šå…©é»ä¹‹é–“è·é›¢çš„å‡½æ•¸ï¼Œè¼¸å…¥å…©é»çš„ç¶“ç·¯åº¦ï¼Œå¯ä»¥è¨ˆç®—å‡ºå…©é»ä¹‹é–“çš„è·é›¢ï¼Œå–®ä½ç‚ºå…¬é‡Œã€‚
 
 ```{r message=FALSE, warning=FALSE}
 earthDist <- function (lon1, lat1, lon2, lat2){
@@ -212,62 +216,62 @@ earthDist <- function (lon1, lat1, lon2, lat2){
 }
 ```
 
-#### **5-2.¿z¿ï¥X 400 ¤½¤Ø¥H¤ºªº¯f¨Ò¸ê®Æ**
+#### **5-2.ç¯©é¸å‡º 400 å…¬å°ºä»¥å…§çš„ç—…ä¾‹è³‡æ–™**
 ```{r message=FALSE, warning=FALSE}
-home.pos <- c(22.997088, 120.201771) # (½n«×, ¸g«×)
-home.dist <- earthDist(dengue.tn$¸g«×®y¼Ğ, dengue.tn$½n«×®y¼Ğ, home.pos[2],  home.pos[1])
+home.pos <- c(22.997088, 120.201771) # (ç·¯åº¦, ç¶“åº¦)
+home.dist <- earthDist(dengue.tn$ç¶“åº¦åº§æ¨™, dengue.tn$ç·¯åº¦åº§æ¨™, home.pos[2],  home.pos[1])
 home.idx <- home.dist <= 0.4;
 dengue.home <- dengue.tn[home.idx, ]
 ```
 
-#### **5-3.¬d¬İ¨C­Ó¤ëªº¸ê®Æª¬ªp**
+#### **5-3.æŸ¥çœ‹æ¯å€‹æœˆçš„è³‡æ–™ç‹€æ³**
 ```{r message=FALSE, warning=FALSE}
 table(dengue.home$month)
 
-barplot(table(dengue.home$month), xlab = "¤ë¥÷", ylab = "¯f¨Ò¼Æ",
-  main = "µn­²¼ö¨C¤ë¯f¨Ò¼Æ¡]¯S©w°Ï°ì¡^")
+barplot(table(dengue.home$month), xlab = "æœˆä»½", ylab = "ç—…ä¾‹æ•¸",
+  main = "ç™»é©ç†±æ¯æœˆç—…ä¾‹æ•¸ï¼ˆç‰¹å®šå€åŸŸï¼‰")
 ```
 
-#### **5-4.¨C­Ó¤ëªº¯f¨Ò¤À§G**
+#### **5-4.æ¯å€‹æœˆçš„ç—…ä¾‹åˆ†ä½ˆ**
 ```{r message=FALSE, warning=FALSE}
 map <- get_map(location = c(lon = home.pos[2], lat = home.pos[1]),
   zoom = 16, language = "zh-TW", color = "bw")
 ggmap(map) +
-  geom_point(aes(x = ¸g«×®y¼Ğ, y = ½n«×®y¼Ğ),
+  geom_point(aes(x = ç¶“åº¦åº§æ¨™, y = ç·¯åº¦åº§æ¨™),
   color = "red", data = dengue.home, size = 5) +
   facet_wrap(~ month)
 ```
 
-#### **5-5.§ï¥Î jitter ªº¤è¦¡µe¹Ï**
+#### **5-5.æ”¹ç”¨ jitter çš„æ–¹å¼ç•«åœ–**
 
-- ¥Ñ©ó¸g½n«×¸ê®Æªººë½T«×¤£¨¬¡A³y¦¨¤j¶qªº¸ê®ÆÂI­«Å|¡A¦]¦¹§ï¥Î jitter ªº¤è¦¡µe¹Ï
-- ³o¼Ë¥i¥H¤ñ¸û²M·¡§e²{¸ê®Æªº¤À¥¬ª¬ªp
+- ç”±æ–¼ç¶“ç·¯åº¦è³‡æ–™çš„ç²¾ç¢ºåº¦ä¸è¶³ï¼Œé€ æˆå¤§é‡çš„è³‡æ–™é»é‡ç–Šï¼Œå› æ­¤æ”¹ç”¨ jitter çš„æ–¹å¼ç•«åœ–
+- é€™æ¨£å¯ä»¥æ¯”è¼ƒæ¸…æ¥šå‘ˆç¾è³‡æ–™çš„åˆ†å¸ƒç‹€æ³
 
 ```{r message=FALSE, warning=FALSE}
 map <- get_map(location = c(lon = home.pos[2], lat = home.pos[1]),
   zoom = 16, language = "zh-TW", color = "bw")
 ggmap(map) +
-  geom_jitter(aes(x = ¸g«×®y¼Ğ, y = ½n«×®y¼Ğ),
+  geom_jitter(aes(x = ç¶“åº¦åº§æ¨™, y = ç·¯åº¦åº§æ¨™),
   size = 3, position = position_jitter(w = 0.0005, h = 0.0005),
   data = dengue.home, color = "red") +
   facet_wrap(~ month)
 ```
 
-#### **5-6.2 ¶g¤§¤º·s¼Wªº¯f¨Ò¤À§G¦a¹Ï**
+#### **5-6.2 é€±ä¹‹å…§æ–°å¢çš„ç—…ä¾‹åˆ†ä½ˆåœ°åœ–**
 
-- °²³]¤µ¤Ñ¬O 2015 ¦~ 9 ¤ë 15 ¤é¡A¦b¦a¹Ï¤Wµe¥X¦¹¤H¦í®a 400 ¤½¤Ø¥H¤º¡A2 ¶g¤§¤º·s¼Wªº¯f¨Ò¤À§G¦a¹Ï- ¿z¿ï¥X¦¹¤H¦í®a 400 ¤½¤Ø¥H¤º¡A¨â¶g¤§¤º·s¼Wªº¯f¨Ò
+- å‡è¨­ä»Šå¤©æ˜¯ 2015 å¹´ 9 æœˆ 15 æ—¥ï¼Œåœ¨åœ°åœ–ä¸Šç•«å‡ºæ­¤äººä½å®¶ 400 å…¬å°ºä»¥å…§ï¼Œ2 é€±ä¹‹å…§æ–°å¢çš„ç—…ä¾‹åˆ†ä½ˆåœ°åœ–- ç¯©é¸å‡ºæ­¤äººä½å®¶ 400 å…¬å°ºä»¥å…§ï¼Œå…©é€±ä¹‹å…§æ–°å¢çš„ç—…ä¾‹
 
 ```{r message=FALSE, warning=FALSE}
-dengue.home$day.diff <- as.numeric(as.Date(dengue.home$½T¶E¤é) - as.Date("2015/09/15"))
+dengue.home$day.diff <- as.numeric(as.Date(dengue.home$ç¢ºè¨ºæ—¥) - as.Date("2015/09/15"))
 dengue.home.subset <- dengue.home[dengue.home$day.diff >= 0 & dengue.home$day.diff < 14, ]
 ```
 
-#### **5-7.¨Ì·Ó®É¶¡¨M©wÃC¦âµe¹Ï**
+#### **5-7.ä¾ç…§æ™‚é–“æ±ºå®šé¡è‰²ç•«åœ–**
 ```{r message=FALSE, warning=FALSE}
 map <- get_map(location = c(lon = home.pos[2], lat = home.pos[1]),
   zoom = 16, language = "zh-TW", color = "bw")
 ggmap(map) +
-  geom_jitter(aes(x = ¸g«×®y¼Ğ, y = ½n«×®y¼Ğ, color = day.diff),
+  geom_jitter(aes(x = ç¶“åº¦åº§æ¨™, y = ç·¯åº¦åº§æ¨™, color = day.diff),
   size = 3, position = position_jitter(w = 0.0005, h = 0.0005),
   data = dengue.home.subset) +
   scale_colour_gradientn(colours=heat.colors(3))
